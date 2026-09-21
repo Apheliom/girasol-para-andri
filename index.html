@@ -20,9 +20,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 
-  <!-- Estilos personalizados -->
-  <link rel="stylesheet" href="style.css"/>
-
   <script>
     tailwind.config = {
       theme: {
@@ -49,7 +46,6 @@
             'float-flower': 'floatFlower 5s ease-in-out infinite',
             'pulse-soft': 'pulseSoft 3s ease-in-out infinite',
             'heart-beat': 'heartBeat 1.8s ease-in-out infinite',
-            'glow': 'glow 3s ease-in-out infinite alternate',
           },
           keyframes: {
             floatFlower: {
@@ -66,16 +62,139 @@
               '28%': { transform: 'scale(1)' },
               '42%': { transform: 'scale(1.15)' },
               '70%': { transform: 'scale(1)' },
-            },
-            glow: {
-              '0%': { filter: 'drop-shadow(0 0 15px rgba(245, 158, 11, 0.4))' },
-              '100%': { filter: 'drop-shadow(0 0 30px rgba(245, 158, 11, 0.8))' }
             }
           }
         }
       }
     }
   </script>
+
+  <style>
+    /* Mobile-first and smooth touch styles */
+    * {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      background-attachment: fixed;
+    }
+
+    /* Glassmorphism Panels */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(254, 240, 138, 0.75);
+      box-shadow: 0 16px 36px -10px rgba(180, 83, 9, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.9);
+    }
+
+    .glass-pill {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(253, 230, 138, 0.85);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-pill:hover {
+      background: rgba(254, 243, 199, 0.95);
+      border-color: rgba(245, 158, 11, 0.6);
+      transform: translateY(-1px);
+    }
+
+    /* Interactive Sunflower Petal Units */
+    .petal-unit {
+      cursor: pointer;
+      pointer-events: auto;
+      transition: filter 0.25s ease, opacity 0.2s ease;
+    }
+
+    .petal-unit path {
+      transition: stroke 0.25s ease, stroke-width 0.25s ease, filter 0.25s ease;
+    }
+
+    .petal-unit:hover {
+      filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.95)) brightness(1.15);
+    }
+
+    .petal-unit.is-selected {
+      filter: drop-shadow(0 0 16px #f59e0b) drop-shadow(0 0 6px #fbbf24) brightness(1.25) !important;
+    }
+
+    .petal-unit.is-selected path.front-petal {
+      stroke: #78350f !important;
+      stroke-width: 2 !important;
+    }
+
+    .petal-unit.is-discovered path.front-petal {
+      stroke: #d97706;
+      stroke-width: 1.5;
+    }
+
+    .petal-unit.is-discovered path.back-petal {
+      stroke: #b45309;
+      stroke-width: 1;
+    }
+
+    /* Floating pollen dots animation */
+    @keyframes pollenRise {
+      0% {
+        transform: translateY(105vh) translateX(0) scale(0.6);
+        opacity: 0;
+      }
+      20% { opacity: 0.75; }
+      80% { opacity: 0.85; }
+      100% {
+        transform: translateY(-10vh) translateX(35px) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    .pollen-dot {
+      position: absolute;
+      background: radial-gradient(circle, #fde047 30%, rgba(254, 240, 138, 0.1) 75%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: pollenRise linear infinite;
+    }
+
+    /* Desktop Presentation Wrapper */
+    @media (min-width: 768px) {
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+
+      main {
+        box-shadow: 0 25px 60px -15px rgba(180, 83, 9, 0.2), 0 0 0 1px rgba(253, 230, 138, 0.6);
+        border-radius: 40px;
+        background: rgba(255, 255, 255, 0.35);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        margin: 20px auto;
+        min-height: calc(100vh - 40px);
+        max-height: 860px;
+        overflow-y: auto;
+      }
+    }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .animate-spin-slow {
+      animation: spinSlow 8s linear infinite;
+    }
+  </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-[#fefbf6] via-[#fdf8ed] to-[#fbf2dd] text-neutral-800 antialiased overflow-x-hidden selection:bg-amber-200">
   
@@ -134,7 +253,7 @@
       </div>
     </header>
 
-    <!-- 2. Sunflower Interactive Area (Perfect Symmetrical Botanical SVG) -->
+    <!-- 2. Sunflower Interactive Area (Botanical SVG con hitboxes 360° perfectos) -->
     <section class="relative w-full flex flex-col items-center justify-center my-1">
       <!-- Ambient flower glow ring -->
       <div class="absolute w-64 h-64 rounded-full bg-gradient-to-tr from-amber-300/40 via-yellow-200/50 to-amber-400/30 blur-2xl animate-pulse-soft pointer-events-none"></div>
@@ -167,23 +286,12 @@
               <stop offset="100%" stop-color="#1d0d03"></stop>
             </radialGradient>
 
-            <!-- Golden Ring Rim Gradient -->
-            <radialGradient cx="50%" cy="50%" id="goldenRim" r="50%">
-              <stop offset="78%" stop-color="transparent"></stop>
-              <stop offset="88%" stop-color="#f59e0b"></stop>
-              <stop offset="100%" stop-color="#b45309"></stop>
-            </radialGradient>
-
             <!-- Leaf Stem Gradient -->
             <linearGradient id="stemGrad" x1="0" x2="1" y1="0" y2="0">
               <stop offset="0%" stop-color="#14532d"></stop>
               <stop offset="45%" stop-color="#22c55e"></stop>
               <stop offset="100%" stop-color="#15803d"></stop>
             </linearGradient>
-
-            <!-- Petal Base Geometry (pointing strictly upward from 150,150) -->
-            <path d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" id="petalShape"></path>
-            <path d="M150 150 C 135 125, 126 80, 150 36 C 174 80, 165 125, 150 150 Z" id="backPetalShape"></path>
 
             <!-- Seed Texture Dots Pattern -->
             <pattern height="12" id="seedPattern" patternTransform="rotate(30)" patternUnits="userSpaceOnUse" width="12">
@@ -207,43 +315,86 @@
             <!-- Right Leaf with spine -->
             <path d="M152 210 C 196 205, 230 235, 240 265 C 205 272, 168 245, 151 222 Z" fill="#166534" opacity="0.95"></path>
             <path d="M152 210 Q 195 235 240 265" fill="none" opacity="0.6" stroke="#86efac" stroke-width="1.2"></path>
-            <!-- Sepals right behind petals -->
+            <!-- Sepals base circle -->
             <circle cx="150" cy="150" fill="#15803d" opacity="0.8" r="54"></circle>
           </g>
 
-          <!-- 2. BACK LAYER OF PETALS (12 petals rotated at offset 15°, 45°, 75°...) -->
-          <g id="back-petals-ring" opacity="0.95">
-            <use fill="url(#backPetalGrad)" href="#backPetalShape" transform="rotate(15 150 150)"></use>
-            <use fill="url(#backPetalGrad)" href="#backPetalShape" transform="rotate(45 150 150)"></use>
-            <use fill="url(#backPetalGrad)" href="#backPetalShape" transform="rotate(75 150 150)"></use>
-            <use fill="url(#backPetalGrad)" href="#backPetalShape" transform="rotate(105 150 150)"></use>
-            <use fill="url(#backPetalGrad)" href="#backPetalShape" transform="rotate(135 150 150)"></use>
-            <use fill="url(#backPetalGrad)" href="#backPetalShape" transform="rotate(165 150 150)"></use>
-            <use fill="url(#backPetalGrad)" href="#backPetalShape" transform="rotate(195 150 150)"></use>
-            <use fill="url(#backPetalGrad)" href="#backPetalShape" transform="rotate(225 150 150)"></use>
-            <use fill="url(#backPetalGrad)" href="#backPetalShape" transform="rotate(255 150 150)"></use>
-            <use fill="url(#backPetalGrad)" href="#backPetalShape" transform="rotate(285 150 150)"></use>
-            <use fill="url(#backPetalGrad)" href="#backPetalShape" transform="rotate(315 150 150)"></use>
-            <use fill="url(#backPetalGrad)" href="#backPetalShape" transform="rotate(345 150 150)"></use>
+          <!-- 2. INTERACTIVE PETAL UNITS (12 Grupos a 30°, cada uno con pétalo frontal y pétalo posterior integrado) -->
+          <g id="all-petals-ring">
+            <!-- Pétalo 0: 0° (Arriba) -->
+            <g class="petal-unit" id="petal-unit-0" data-petal-id="0" transform="rotate(0 150 150)">
+              <path class="back-petal" d="M150 150 C 135 125, 126 80, 150 36 C 174 80, 165 125, 150 150 Z" fill="url(#backPetalGrad)" transform="rotate(15 150 150)"></path>
+              <path class="front-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" fill="url(#frontPetalGrad)" stroke="#f59e0b" stroke-width="0.75"></path>
+            </g>
+
+            <!-- Pétalo 1: 30° -->
+            <g class="petal-unit" id="petal-unit-1" data-petal-id="1" transform="rotate(30 150 150)">
+              <path class="back-petal" d="M150 150 C 135 125, 126 80, 150 36 C 174 80, 165 125, 150 150 Z" fill="url(#backPetalGrad)" transform="rotate(15 150 150)"></path>
+              <path class="front-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" fill="url(#frontPetalGrad)" stroke="#f59e0b" stroke-width="0.75"></path>
+            </g>
+
+            <!-- Pétalo 2: 60° -->
+            <g class="petal-unit" id="petal-unit-2" data-petal-id="2" transform="rotate(60 150 150)">
+              <path class="back-petal" d="M150 150 C 135 125, 126 80, 150 36 C 174 80, 165 125, 150 150 Z" fill="url(#backPetalGrad)" transform="rotate(15 150 150)"></path>
+              <path class="front-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" fill="url(#frontPetalGrad)" stroke="#f59e0b" stroke-width="0.75"></path>
+            </g>
+
+            <!-- Pétalo 3: 90° (Derecha) -->
+            <g class="petal-unit" id="petal-unit-3" data-petal-id="3" transform="rotate(90 150 150)">
+              <path class="back-petal" d="M150 150 C 135 125, 126 80, 150 36 C 174 80, 165 125, 150 150 Z" fill="url(#backPetalGrad)" transform="rotate(15 150 150)"></path>
+              <path class="front-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" fill="url(#frontPetalGrad)" stroke="#f59e0b" stroke-width="0.75"></path>
+            </g>
+
+            <!-- Pétalo 4: 120° -->
+            <g class="petal-unit" id="petal-unit-4" data-petal-id="4" transform="rotate(120 150 150)">
+              <path class="back-petal" d="M150 150 C 135 125, 126 80, 150 36 C 174 80, 165 125, 150 150 Z" fill="url(#backPetalGrad)" transform="rotate(15 150 150)"></path>
+              <path class="front-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" fill="url(#frontPetalGrad)" stroke="#f59e0b" stroke-width="0.75"></path>
+            </g>
+
+            <!-- Pétalo 5: 150° -->
+            <g class="petal-unit" id="petal-unit-5" data-petal-id="5" transform="rotate(150 150 150)">
+              <path class="back-petal" d="M150 150 C 135 125, 126 80, 150 36 C 174 80, 165 125, 150 150 Z" fill="url(#backPetalGrad)" transform="rotate(15 150 150)"></path>
+              <path class="front-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" fill="url(#frontPetalGrad)" stroke="#f59e0b" stroke-width="0.75"></path>
+            </g>
+
+            <!-- Pétalo 6: 180° (Abajo) -->
+            <g class="petal-unit" id="petal-unit-6" data-petal-id="6" transform="rotate(180 150 150)">
+              <path class="back-petal" d="M150 150 C 135 125, 126 80, 150 36 C 174 80, 165 125, 150 150 Z" fill="url(#backPetalGrad)" transform="rotate(15 150 150)"></path>
+              <path class="front-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" fill="url(#frontPetalGrad)" stroke="#f59e0b" stroke-width="0.75"></path>
+            </g>
+
+            <!-- Pétalo 7: 210° -->
+            <g class="petal-unit" id="petal-unit-7" data-petal-id="7" transform="rotate(210 150 150)">
+              <path class="back-petal" d="M150 150 C 135 125, 126 80, 150 36 C 174 80, 165 125, 150 150 Z" fill="url(#backPetalGrad)" transform="rotate(15 150 150)"></path>
+              <path class="front-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" fill="url(#frontPetalGrad)" stroke="#f59e0b" stroke-width="0.75"></path>
+            </g>
+
+            <!-- Pétalo 8: 240° -->
+            <g class="petal-unit" id="petal-unit-8" data-petal-id="8" transform="rotate(240 150 150)">
+              <path class="back-petal" d="M150 150 C 135 125, 126 80, 150 36 C 174 80, 165 125, 150 150 Z" fill="url(#backPetalGrad)" transform="rotate(15 150 150)"></path>
+              <path class="front-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" fill="url(#frontPetalGrad)" stroke="#f59e0b" stroke-width="0.75"></path>
+            </g>
+
+            <!-- Pétalo 9: 270° (Izquierda) -->
+            <g class="petal-unit" id="petal-unit-9" data-petal-id="9" transform="rotate(270 150 150)">
+              <path class="back-petal" d="M150 150 C 135 125, 126 80, 150 36 C 174 80, 165 125, 150 150 Z" fill="url(#backPetalGrad)" transform="rotate(15 150 150)"></path>
+              <path class="front-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" fill="url(#frontPetalGrad)" stroke="#f59e0b" stroke-width="0.75"></path>
+            </g>
+
+            <!-- Pétalo 10: 300° -->
+            <g class="petal-unit" id="petal-unit-10" data-petal-id="10" transform="rotate(300 150 150)">
+              <path class="back-petal" d="M150 150 C 135 125, 126 80, 150 36 C 174 80, 165 125, 150 150 Z" fill="url(#backPetalGrad)" transform="rotate(15 150 150)"></path>
+              <path class="front-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" fill="url(#frontPetalGrad)" stroke="#f59e0b" stroke-width="0.75"></path>
+            </g>
+
+            <!-- Pétalo 11: 330° -->
+            <g class="petal-unit" id="petal-unit-11" data-petal-id="11" transform="rotate(330 150 150)">
+              <path class="back-petal" d="M150 150 C 135 125, 126 80, 150 36 C 174 80, 165 125, 150 150 Z" fill="url(#backPetalGrad)" transform="rotate(15 150 150)"></path>
+              <path class="front-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" fill="url(#frontPetalGrad)" stroke="#f59e0b" stroke-width="0.75"></path>
+            </g>
           </g>
 
-          <!-- 3. FOREGROUND INTERACTIVE PETALS (12 Main petals, evenly spaced at 30° each) -->
-          <g id="interactive-petals-ring">
-            <path class="interactive-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" data-petal-id="0" fill="url(#frontPetalGrad)" id="petal-0" stroke="#f59e0b" stroke-width="0.75" transform="rotate(0 150 150)"></path>
-            <path class="interactive-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" data-petal-id="1" fill="url(#frontPetalGrad)" id="petal-1" stroke="#f59e0b" stroke-width="0.75" transform="rotate(30 150 150)"></path>
-            <path class="interactive-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" data-petal-id="2" fill="url(#frontPetalGrad)" id="petal-2" stroke="#f59e0b" stroke-width="0.75" transform="rotate(60 150 150)"></path>
-            <path class="interactive-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" data-petal-id="3" fill="url(#frontPetalGrad)" id="petal-3" stroke="#f59e0b" stroke-width="0.75" transform="rotate(90 150 150)"></path>
-            <path class="interactive-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" data-petal-id="4" fill="url(#frontPetalGrad)" id="petal-4" stroke="#f59e0b" stroke-width="0.75" transform="rotate(120 150 150)"></path>
-            <path class="interactive-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" data-petal-id="5" fill="url(#frontPetalGrad)" id="petal-5" stroke="#f59e0b" stroke-width="0.75" transform="rotate(150 150 150)"></path>
-            <path class="interactive-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" data-petal-id="6" fill="url(#frontPetalGrad)" id="petal-6" stroke="#f59e0b" stroke-width="0.75" transform="rotate(180 150 150)"></path>
-            <path class="interactive-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" data-petal-id="7" fill="url(#frontPetalGrad)" id="petal-7" stroke="#f59e0b" stroke-width="0.75" transform="rotate(210 150 150)"></path>
-            <path class="interactive-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" data-petal-id="8" fill="url(#frontPetalGrad)" id="petal-8" stroke="#f59e0b" stroke-width="0.75" transform="rotate(240 150 150)"></path>
-            <path class="interactive-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" data-petal-id="9" fill="url(#frontPetalGrad)" id="petal-9" stroke="#f59e0b" stroke-width="0.75" transform="rotate(270 150 150)"></path>
-            <path class="interactive-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" data-petal-id="10" fill="url(#frontPetalGrad)" id="petal-10" stroke="#f59e0b" stroke-width="0.75" transform="rotate(300 150 150)"></path>
-            <path class="interactive-petal" d="M150 150 C 137 122, 130 75, 150 28 C 170 75, 163 122, 150 150 Z" data-petal-id="11" fill="url(#frontPetalGrad)" id="petal-11" stroke="#f59e0b" stroke-width="0.75" transform="rotate(330 150 150)"></path>
-          </g>
-
-          <!-- 4. SUNFLOWER CENTER DISC -->
+          <!-- 3. SUNFLOWER CENTER DISC -->
           <g class="cursor-pointer" filter="url(#coreShadow)" id="center-disc" role="button" aria-label="Centro del girasol">
             <circle cx="150" cy="150" fill="url(#centerDiscGrad)" r="52" stroke="#d97706" stroke-width="2.5"></circle>
             <circle cx="150" cy="150" fill="url(#seedPattern)" pointer-events="none" r="50"></circle>
@@ -320,7 +471,7 @@
     <!-- 5. Modal Emergente Central de Pétalo Individual -->
     <div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4 opacity-0 pointer-events-none transition-all duration-300" id="petal-modal" role="dialog" aria-modal="true">
       <div class="glass-panel max-w-sm w-full rounded-3xl p-6 text-center space-y-4 border-2 border-amber-300 shadow-2xl transform scale-90 transition-all duration-300 relative" id="petal-modal-box">
-        <!-- Botón cerrar X en la esquina superior -->
+        <!-- Botón cerrar X -->
         <button onclick="closePetalModal()" class="absolute top-3.5 right-4 text-stone-400 hover:text-stone-800 text-lg font-bold p-1 leading-none transition" aria-label="Cerrar ventana">✕</button>
         
         <!-- Insignia del Pétalo -->
@@ -385,7 +536,7 @@
       </div>
     </div>
 
-    <!-- 6. Modal de Personalización / Compartir Enlace -->
+    <!-- 7. Modal de Personalización / Compartir Enlace -->
     <div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4 opacity-0 pointer-events-none transition-all duration-500" id="share-modal" role="dialog" aria-modal="true">
       <div class="glass-panel max-w-sm w-full rounded-3xl p-6 text-left space-y-4 border border-amber-300 shadow-2xl transform scale-90 transition-all duration-500" id="share-box">
         <div class="flex items-center justify-between border-b border-amber-200/70 pb-2">
@@ -427,6 +578,709 @@
   </main>
 
   <!-- Lógica y Funcionalidades -->
-  <script src="script.js"></script>
+  <script>
+    /**
+     * Girasol de Amor Interactivo 🌻
+     * Dedicatoria de Mai para Andri
+     */
+    const CONFIG = {
+      defaultSender: "Mai",
+      defaultReceiver: "Andri",
+    };
+
+    const petalMessages = [
+      {
+        id: 0,
+        title: "Tu Sonrisa Radiante",
+        text: "Tu sonrisa tiene la magia pura de iluminar hasta mi día más gris. Verte sonreír es y será siempre mi momento favorito."
+      },
+      {
+        id: 1,
+        title: "Mi Luz en Todo Momento",
+        text: "Igual que este girasol busca incansablemente el sol, mi corazón siempre encuentra su rumbo y su calma en ti."
+      },
+      {
+        id: 2,
+        title: "Tus Abrazos Dulces",
+        text: "Cuando me abrazas, el mundo entero se silencia. En tus brazos encontré el único lugar donde siempre quiero quedarme."
+      },
+      {
+        id: 3,
+        title: "Tu Manera Tan Hermosa de Ser",
+        text: "Amo tu bondad infinita, la ternura que irradias y la nobleza de un corazón que me enamora cada día más."
+      },
+      {
+        id: 4,
+        title: "Nuestras Conversaciones",
+        text: "Desde las risas más tontas hasta los sueños más profundos, cada minuto contigo se convierte en un recuerdo inolvidable."
+      },
+      {
+        id: 5,
+        title: "Tu Fuerza e Inspiración",
+        text: "Admiro tu pasión, tu valentía y la belleza con la que luchas por todo lo que te propones. Eres mi inspiración constante."
+      },
+      {
+        id: 6,
+        title: "Mi Refugio Seguro",
+        text: "A tu lado puedo ser completamente yo, porque en tu mirada solo encuentro amor sincero, paz y comprensión infinita."
+      },
+      {
+        id: 7,
+        title: "Cada Recuerdo Juntos",
+        text: "Cada foto, cada paseo de la mano y cada mirada cómplice son tesoros invaluables guardados en lo más profundo de mi alma."
+      },
+      {
+        id: 8,
+        title: "El Brillo de Tus Ojos",
+        text: "En tus ojos veo la sinceridad y la magia de un amor que me llena de ilusión y esperanza todos los días."
+      },
+      {
+        id: 9,
+        title: "Ser Tu Compañero de Vida",
+        text: "Eres mi gran amor, mi confidente, mi cómplice favorita y la persona con quien quiero celebrar cada pequeño triunfo."
+      },
+      {
+        id: 10,
+        title: "Tus Pequeños Gestos",
+        text: "Amo tus detalles imprevistos, tu forma dulce de hablarme y la manera tierna en que tomas mi mano al caminar."
+      },
+      {
+        id: 11,
+        title: "Nuestro Futuro Juntos",
+        text: "Cuando cierro los ojos e imagino los años que vienen, siempre estás tú a mi lado construyendo nuestra historia de amor."
+      }
+    ];
+
+    let currentPetalIndex = null;
+    let discoveredPetals = new Set();
+    let modalTriggered = false;
+    let audioContext = null;
+    let isMusicPlaying = false;
+    let melodyInterval = null;
+
+    // DOM
+    const petalUnits = document.querySelectorAll('.petal-unit');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const cardIcon = document.getElementById('card-icon');
+    const cardTitle = document.getElementById('card-title');
+    const cardStep = document.getElementById('card-step');
+    const petalMessageText = document.getElementById('petal-message-text');
+    const tapInstruction = document.getElementById('tap-instruction');
+    const centerDisc = document.getElementById('center-disc');
+    const completionModal = document.getElementById('completion-modal');
+    const completionBox = document.getElementById('completion-box');
+    const petalModal = document.getElementById('petal-modal');
+    const petalModalBox = document.getElementById('petal-modal-box');
+    const petalModalBadge = document.getElementById('petal-modal-badge');
+    const petalModalTitle = document.getElementById('petal-modal-title');
+    const petalModalText = document.getElementById('petal-modal-text');
+    const petalModalIcon = document.getElementById('petal-modal-icon');
+    const shareModal = document.getElementById('share-modal');
+    const shareBox = document.getElementById('share-box');
+    const musicToggleBtn = document.getElementById('music-toggle');
+    const musicIcon = document.getElementById('music-icon');
+    const musicLabel = document.getElementById('music-label');
+    const shareBtn = document.getElementById('share-btn');
+
+    let senderName = CONFIG.defaultSender;
+    let receiverName = CONFIG.defaultReceiver;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      parseUrlParams();
+      updateNamesInUI();
+      generatePollen();
+      setupEventListeners();
+      loadSavedProgress();
+      setupCanvas();
+    });
+
+    function parseUrlParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('to')) {
+        receiverName = urlParams.get('to').trim() || CONFIG.defaultReceiver;
+      }
+      if (urlParams.has('from')) {
+        senderName = urlParams.get('from').trim() || CONFIG.defaultSender;
+      }
+    }
+
+    function updateNamesInUI() {
+      document.title = `Para Mi Amor ${receiverName} - Un Girasol Para Ti 🌻`;
+      
+      const headerBadge = document.getElementById('header-badge');
+      if (headerBadge) {
+        headerBadge.textContent = `Para ${receiverName}, de parte de ${senderName} ✨`;
+      }
+      
+      const footerSender = document.getElementById('footer-sender');
+      const footerReceiver = document.getElementById('footer-receiver');
+      if (footerSender) footerSender.textContent = senderName;
+      if (footerReceiver) footerReceiver.textContent = receiverName;
+
+      const modalCelebrationTitle = document.getElementById('modal-celebration-title');
+      if (modalCelebrationTitle) {
+        modalCelebrationTitle.textContent = `¡Completaste tu Girasol, ${receiverName}!`;
+      }
+
+      const modalSignature = document.getElementById('modal-signature');
+      if (modalSignature) {
+        modalSignature.textContent = `— Con amor infinito, ${senderName} 💛`;
+      }
+
+      const inputTo = document.getElementById('input-to');
+      const inputFrom = document.getElementById('input-from');
+      if (inputTo) inputTo.value = receiverName;
+      if (inputFrom) inputFrom.value = senderName;
+    }
+
+    function generatePollen() {
+      const container = document.getElementById('pollen-container');
+      if (!container) return;
+      const count = 18;
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'pollen-dot';
+        const size = Math.random() * 6 + 3;
+        dot.style.width = `${size}px`;
+        dot.style.height = `${size}px`;
+        dot.style.left = `${Math.random() * 100}%`;
+        dot.style.animationDuration = `${Math.random() * 8 + 6}s`;
+        dot.style.animationDelay = `${Math.random() * 5}s`;
+        container.appendChild(dot);
+      }
+    }
+
+    function setupEventListeners() {
+      // Evento de clic para todos los 12 cuadrantes/pétalos (front y back incluidos)
+      petalUnits.forEach(unit => {
+        unit.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = parseInt(unit.getAttribute('data-petal-id'), 10);
+          selectPetal(id, true);
+          playChimeSound(id);
+        });
+      });
+
+      if (centerDisc) {
+        centerDisc.addEventListener('click', (e) => {
+          e.stopPropagation();
+          playChimeSound(6);
+          revealRandomPetal();
+          spawnHeartSparkles();
+        });
+      }
+
+      if (musicToggleBtn) {
+        musicToggleBtn.addEventListener('click', toggleRomanticMusic);
+      }
+
+      if (shareBtn) {
+        shareBtn.addEventListener('click', openShareModal);
+      }
+
+      if (petalModal) {
+        petalModal.addEventListener('click', (e) => {
+          if (e.target === petalModal) {
+            closePetalModal();
+          }
+        });
+      }
+    }
+
+    function selectPetal(id, showModalPopup = true) {
+      currentPetalIndex = id;
+      discoveredPetals.add(id);
+
+      if (tapInstruction) {
+        tapInstruction.style.opacity = '0';
+      }
+
+      // Actualizar estado visual de cada grupo de pétalo
+      petalUnits.forEach(unit => {
+        const uId = parseInt(unit.getAttribute('data-petal-id'), 10);
+        if (uId === id) {
+          unit.classList.add('is-selected');
+          // Mover al frente de su grupo SVG
+          unit.parentNode.appendChild(unit);
+        } else {
+          unit.classList.remove('is-selected');
+          if (discoveredPetals.has(uId)) {
+            unit.classList.add('is-discovered');
+          }
+        }
+      });
+
+      const count = discoveredPetals.size;
+      const percentage = Math.round((count / 12) * 100);
+      if (progressBar) progressBar.style.width = `${percentage}%`;
+      if (progressText) progressText.textContent = `${count} / 12 pétalos`;
+
+      const data = petalMessages[id];
+      if (petalMessageText) {
+        petalMessageText.style.opacity = '0';
+        petalMessageText.style.transform = 'translateY(4px)';
+
+        setTimeout(() => {
+          if (cardIcon) cardIcon.textContent = `#${id + 1}`;
+          if (cardTitle) cardTitle.textContent = data.title;
+          if (cardStep) cardStep.textContent = `Pétalo ${id + 1} de 12`;
+          petalMessageText.textContent = `«${data.text}»`;
+          petalMessageText.style.opacity = '1';
+          petalMessageText.style.transform = 'translateY(0)';
+        }, 150);
+      }
+
+      if (showModalPopup) {
+        openPetalModal(id);
+      }
+
+      saveProgress();
+      spawnFloatingHeart();
+
+      if (count === 12 && !modalTriggered) {
+        modalTriggered = true;
+        setTimeout(() => {
+          closePetalModal();
+          openModal();
+          triggerCelebrationEffect();
+        }, 1200);
+      }
+    }
+
+    function openPetalModal(id) {
+      if (!petalModal || !petalModalBox) return;
+      const data = petalMessages[id];
+
+      if (petalModalBadge) petalModalBadge.textContent = `Pétalo ${id + 1} de 12`;
+      if (petalModalTitle) petalModalTitle.textContent = data.title;
+      if (petalModalText) petalModalText.textContent = `«${data.text}»`;
+      if (petalModalIcon) petalModalIcon.textContent = "🌻";
+
+      petalModal.classList.remove('pointer-events-none', 'opacity-0');
+      petalModal.classList.add('opacity-100');
+      petalModalBox.classList.remove('scale-90');
+      petalModalBox.classList.add('scale-100');
+    }
+
+    function closePetalModal() {
+      if (!petalModal || !petalModalBox) return;
+      petalModal.classList.add('opacity-0', 'pointer-events-none');
+      petalModal.classList.remove('opacity-100');
+      petalModalBox.classList.remove('scale-100');
+      petalModalBox.classList.add('scale-90');
+    }
+
+    function navigateFromModal(dir) {
+      closePetalModal();
+      setTimeout(() => {
+        navigatePetal(dir);
+      }, 180);
+    }
+
+    function navigatePetal(direction) {
+      if (currentPetalIndex === null) {
+        selectPetal(0, true);
+        playChimeSound(0);
+        return;
+      }
+      const nextIndex = (currentPetalIndex + direction + 12) % 12;
+      selectPetal(nextIndex, true);
+      playChimeSound(nextIndex);
+    }
+
+    function revealRandomPetal() {
+      const unread = [];
+      for (let i = 0; i < 12; i++) {
+        if (!discoveredPetals.has(i)) unread.push(i);
+      }
+
+      if (unread.length > 0) {
+        const choice = unread[Math.floor(Math.random() * unread.length)];
+        selectPetal(choice, true);
+        playChimeSound(choice);
+      } else {
+        let r;
+        do {
+          r = Math.floor(Math.random() * 12);
+        } while (r === currentPetalIndex);
+        selectPetal(r, true);
+        playChimeSound(r);
+      }
+    }
+
+    function spawnFloatingHeart() {
+      const heart = document.createElement('div');
+      heart.textContent = '💛';
+      heart.style.position = 'fixed';
+      heart.style.left = '50%';
+      heart.style.top = '45%';
+      heart.style.transform = 'translate(-50%, -50%) scale(0.6)';
+      heart.style.pointerEvents = 'none';
+      heart.style.fontSize = '24px';
+      heart.style.zIndex = '60';
+      heart.style.transition = 'all 0.95s cubic-bezier(0.16, 1, 0.3, 1)';
+      document.body.appendChild(heart);
+
+      requestAnimationFrame(() => {
+        const offset = (Math.random() - 0.5) * 160;
+        heart.style.transform = `translate(calc(-50% + ${offset}px), -140px) scale(1.35)`;
+        heart.style.opacity = '0';
+      });
+
+      setTimeout(() => heart.remove(), 1000);
+    }
+
+    function spawnHeartSparkles() {
+      for (let i = 0; i < 6; i++) {
+        setTimeout(spawnFloatingHeart, i * 80);
+      }
+    }
+
+    function openModal() {
+      if (!completionModal || !completionBox) return;
+      completionModal.classList.remove('pointer-events-none', 'opacity-0');
+      completionModal.classList.add('opacity-100');
+      completionBox.classList.remove('scale-90');
+      completionBox.classList.add('scale-100');
+      spawnHeartSparkles();
+      playVictoryMelody();
+    }
+
+    function closeModal() {
+      if (!completionModal || !completionBox) return;
+      completionModal.classList.add('opacity-0', 'pointer-events-none');
+      completionModal.classList.remove('opacity-100');
+      completionBox.classList.remove('scale-100');
+      completionBox.classList.add('scale-90');
+    }
+
+    function openShareModal() {
+      if (!shareModal || !shareBox) return;
+      shareModal.classList.remove('pointer-events-none', 'opacity-0');
+      shareModal.classList.add('opacity-100');
+      shareBox.classList.remove('scale-90');
+      shareBox.classList.add('scale-100');
+    }
+
+    function closeShareModal() {
+      if (!shareModal || !shareBox) return;
+      shareModal.classList.add('opacity-0', 'pointer-events-none');
+      shareModal.classList.remove('opacity-100');
+      shareBox.classList.remove('scale-100');
+      shareBox.classList.add('scale-90');
+    }
+
+    function getGeneratedShareUrl() {
+      const inputTo = document.getElementById('input-to');
+      const inputFrom = document.getElementById('input-from');
+      const toVal = encodeURIComponent(inputTo?.value.trim() || receiverName);
+      const fromVal = encodeURIComponent(inputFrom?.value.trim() || senderName);
+      
+      const baseUrl = window.location.origin + window.location.pathname;
+      return `${baseUrl}?to=${toVal}&from=${fromVal}`;
+    }
+
+    function saveAndCopyShareLink() {
+      const inputTo = document.getElementById('input-to');
+      const inputFrom = document.getElementById('input-from');
+      if (inputTo) receiverName = inputTo.value.trim() || CONFIG.defaultReceiver;
+      if (inputFrom) senderName = inputFrom.value.trim() || CONFIG.defaultSender;
+      
+      updateNamesInUI();
+      const shareUrl = getGeneratedShareUrl();
+      
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        const feedback = document.getElementById('share-feedback');
+        if (feedback) {
+          feedback.textContent = "✅ ¡Enlace copiado al portapapeles! Listo para enviar.";
+          feedback.classList.add('text-amber-800', 'font-bold');
+          setTimeout(() => {
+            feedback.textContent = "El enlace guardará los nombres en la URL para abrirlos directamente.";
+            feedback.classList.remove('text-amber-800', 'font-bold');
+          }, 3500);
+        }
+      }).catch(() => {
+        prompt("Copia tu enlace:", shareUrl);
+      });
+    }
+
+    function shareOnWhatsApp() {
+      const shareUrl = getGeneratedShareUrl();
+      const message = `🌻 Para ti, ${receiverName}: Te he preparado este girasol con todo mi amor. Toca cada pétalo para descubrirlo: ${shareUrl}`;
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    }
+
+    function saveProgress() {
+      try {
+        const data = {
+          discovered: Array.from(discoveredPetals),
+          current: currentPetalIndex,
+        };
+        localStorage.setItem('girasol_progress', JSON.stringify(data));
+      } catch (e) {}
+    }
+
+    function loadSavedProgress() {
+      try {
+        const saved = localStorage.getItem('girasol_progress');
+        if (saved) {
+          const data = JSON.parse(saved);
+          if (Array.isArray(data.discovered)) {
+            data.discovered.forEach(id => {
+              discoveredPetals.add(id);
+              const unit = document.getElementById(`petal-unit-${id}`);
+              if (unit) unit.classList.add('is-discovered');
+            });
+            const count = discoveredPetals.size;
+            const percentage = Math.round((count / 12) * 100);
+            if (progressBar) progressBar.style.width = `${percentage}%`;
+            if (progressText) progressText.textContent = `${count} / 12 pétalos`;
+          }
+          if (typeof data.current === 'number' && data.current >= 0 && data.current < 12) {
+            selectPetal(data.current, false);
+          }
+        }
+      } catch (e) {}
+    }
+
+    function restartProgress() {
+      localStorage.removeItem('girasol_progress');
+      discoveredPetals.clear();
+      currentPetalIndex = null;
+      modalTriggered = false;
+      
+      petalUnits.forEach(unit => {
+        unit.classList.remove('is-selected', 'is-discovered');
+      });
+      
+      if (progressBar) progressBar.style.width = '0%';
+      if (progressText) progressText.textContent = '0 / 12 pétalos';
+      if (tapInstruction) tapInstruction.style.opacity = '1';
+      if (cardIcon) cardIcon.textContent = '🌻';
+      if (cardTitle) cardTitle.textContent = 'Presiona un pétalo';
+      if (cardStep) cardStep.textContent = '12 razones para ti';
+      if (petalMessageText) {
+        petalMessageText.textContent = '«Cada pétalo de este girasol guarda una razón por la que iluminas mis días. Elige uno para descubrirla...»';
+      }
+      
+      closeModal();
+      closePetalModal();
+    }
+
+    function initAudioContext() {
+      if (!audioContext) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioContext = new AudioContextClass();
+        }
+      }
+      if (audioContext && audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+    }
+
+    function playChimeSound(index = 0) {
+      try {
+        initAudioContext();
+        if (!audioContext) return;
+
+        const pentatonicFrequencies = [
+          523.25, 587.33, 659.25, 783.99, 880.00,
+          1046.50, 1174.66, 1318.51, 1567.98, 1760.00,
+          2093.00, 2349.32
+        ];
+
+        const freq = pentatonicFrequencies[index % pentatonicFrequencies.length];
+        const osc = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+
+        gainNode.gain.setValueAtTime(0.01, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.25, audioContext.currentTime + 0.04);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 1.2);
+
+        osc.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        osc.start();
+        osc.stop(audioContext.currentTime + 1.2);
+      } catch (e) {}
+    }
+
+    function playVictoryMelody() {
+      try {
+        initAudioContext();
+        if (!audioContext) return;
+
+        const chords = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+        chords.forEach((freq, i) => {
+          setTimeout(() => {
+            const osc = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.01, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.18, audioContext.currentTime + 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 1.8);
+            osc.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            osc.start();
+            osc.stop(audioContext.currentTime + 1.8);
+          }, i * 140);
+        });
+      } catch (e) {}
+    }
+
+    function toggleRomanticMusic() {
+      initAudioContext();
+      if (isMusicPlaying) {
+        stopRomanticMelody();
+      } else {
+        startRomanticMelody();
+      }
+    }
+
+    function startRomanticMelody() {
+      isMusicPlaying = true;
+      if (musicLabel) musicLabel.textContent = "Pausa";
+      if (musicIcon) musicIcon.classList.add('animate-spin-slow');
+
+      const notes = [
+        { f: 440.00, d: 0.8 }, { f: 554.37, d: 0.8 }, { f: 659.25, d: 1.2 },
+        { f: 554.37, d: 0.8 }, { f: 739.99, d: 1.2 }, { f: 659.25, d: 1.4 },
+        { f: 493.88, d: 0.8 }, { f: 587.33, d: 0.8 }, { f: 739.99, d: 1.2 },
+        { f: 880.00, d: 1.6 }
+      ];
+
+      let noteIndex = 0;
+
+      function playNextAmbientNote() {
+        if (!isMusicPlaying || !audioContext) return;
+        const note = notes[noteIndex];
+        noteIndex = (noteIndex + 1) % notes.length;
+
+        try {
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(note.f, audioContext.currentTime);
+
+          gain.gain.setValueAtTime(0.001, audioContext.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.08, audioContext.currentTime + 0.1);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + note.d);
+
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+
+          osc.start();
+          osc.stop(audioContext.currentTime + note.d);
+        } catch (e) {}
+      }
+
+      playNextAmbientNote();
+      melodyInterval = setInterval(playNextAmbientNote, 1100);
+    }
+
+    function stopRomanticMelody() {
+      isMusicPlaying = false;
+      if (melodyInterval) {
+        clearInterval(melodyInterval);
+        melodyInterval = null;
+      }
+      if (musicLabel) musicLabel.textContent = "Música";
+      if (musicIcon) musicIcon.classList.remove('animate-spin-slow');
+    }
+
+    // Canvas Confetti
+    let canvas, ctx;
+    let particles = [];
+    let animFrameId = null;
+
+    function setupCanvas() {
+      canvas = document.getElementById('celebration-canvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+    }
+
+    function resizeCanvas() {
+      if (!canvas) return;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function triggerCelebrationEffect() {
+      if (!canvas || !ctx) return;
+      particles = [];
+      const count = 75;
+      const colors = ['#f59e0b', '#fbbf24', '#fde047', '#ea580c', '#f43f5e', '#ffffff'];
+
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 14,
+          vy: (Math.random() - 0.7) * 15,
+          size: Math.random() * 12 + 6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: 1,
+          rotation: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 8,
+          type: Math.random() > 0.4 ? 'heart' : 'sparkle'
+        });
+      }
+
+      if (!animFrameId) {
+        renderCelebration();
+      }
+    }
+
+    function renderCelebration() {
+      if (!ctx || !canvas) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      let activeParticles = 0;
+
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.28;
+        p.vx *= 0.98;
+        p.rotation += p.vRot;
+        p.alpha -= 0.009;
+
+        if (p.alpha > 0) {
+          activeParticles++;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.fillStyle = p.color;
+
+          if (p.type === 'heart') {
+            ctx.font = `${p.size}px serif`;
+            ctx.fillText('💛', -p.size / 2, p.size / 2);
+          } else {
+            ctx.beginPath();
+            ctx.arc(0, 0, p.size / 3, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+      });
+
+      if (activeParticles > 0) {
+        animFrameId = requestAnimationFrame(renderCelebration);
+      } else {
+        animFrameId = null;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+  </script>
 </body>
 </html>

@@ -2,14 +2,11 @@
  * Girasol de Amor Interactivo 🌻
  * Dedicatoria de Mai para Andri
  */
-
-// Estado global y configuración
 const CONFIG = {
   defaultSender: "Mai",
   defaultReceiver: "Andri",
 };
 
-// 12 Razones románticas personalizadas
 const petalMessages = [
   {
     id: 0,
@@ -80,8 +77,8 @@ let audioContext = null;
 let isMusicPlaying = false;
 let melodyInterval = null;
 
-// Elementos DOM
-const petalElements = document.querySelectorAll('.interactive-petal');
+// DOM
+const petalUnits = document.querySelectorAll('.petal-unit');
 const progressBar = document.getElementById('progress-bar');
 const progressText = document.getElementById('progress-text');
 const cardIcon = document.getElementById('card-icon');
@@ -97,6 +94,7 @@ const petalModalBox = document.getElementById('petal-modal-box');
 const petalModalBadge = document.getElementById('petal-modal-badge');
 const petalModalTitle = document.getElementById('petal-modal-title');
 const petalModalText = document.getElementById('petal-modal-text');
+const petalModalIcon = document.getElementById('petal-modal-icon');
 const shareModal = document.getElementById('share-modal');
 const shareBox = document.getElementById('share-box');
 const musicToggleBtn = document.getElementById('music-toggle');
@@ -104,11 +102,9 @@ const musicIcon = document.getElementById('music-icon');
 const musicLabel = document.getElementById('music-label');
 const shareBtn = document.getElementById('share-btn');
 
-// Nombres dinámicos
 let senderName = CONFIG.defaultSender;
 let receiverName = CONFIG.defaultReceiver;
 
-// Inicialización de la aplicación
 document.addEventListener('DOMContentLoaded', () => {
   parseUrlParams();
   updateNamesInUI();
@@ -118,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setupCanvas();
 });
 
-// Lectura de parámetros URL (?to=Andri&from=Mai)
 function parseUrlParams() {
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.has('to')) {
@@ -129,7 +124,6 @@ function parseUrlParams() {
   }
 }
 
-// Actualizar textos en la interfaz
 function updateNamesInUI() {
   document.title = `Para Mi Amor ${receiverName} - Un Girasol Para Ti 🌻`;
   
@@ -159,7 +153,6 @@ function updateNamesInUI() {
   if (inputFrom) inputFrom.value = senderName;
 }
 
-// Generación de partículas de polen dorado flotante
 function generatePollen() {
   const container = document.getElementById('pollen-container');
   if (!container) return;
@@ -177,37 +170,33 @@ function generatePollen() {
   }
 }
 
-// Configuración de eventos de usuario
 function setupEventListeners() {
-  // Clic en pétalos individuales
-  petalElements.forEach(petal => {
-    petal.addEventListener('click', () => {
-      const id = parseInt(petal.getAttribute('data-petal-id'), 10);
-      selectPetal(id);
+  petalUnits.forEach(unit => {
+    unit.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = parseInt(unit.getAttribute('data-petal-id'), 10);
+      selectPetal(id, true);
       playChimeSound(id);
     });
   });
 
-  // Clic en centro del girasol
   if (centerDisc) {
-    centerDisc.addEventListener('click', () => {
+    centerDisc.addEventListener('click', (e) => {
+      e.stopPropagation();
       playChimeSound(6);
       revealRandomPetal();
       spawnHeartSparkles();
     });
   }
 
-  // Botón de música
   if (musicToggleBtn) {
     musicToggleBtn.addEventListener('click', toggleRomanticMusic);
   }
 
-  // Botón de compartir
   if (shareBtn) {
     shareBtn.addEventListener('click', openShareModal);
   }
 
-  // Cerrar modal de pétalo al hacer clic en el backdrop
   if (petalModal) {
     petalModal.addEventListener('click', (e) => {
       if (e.target === petalModal) {
@@ -217,37 +206,32 @@ function setupEventListeners() {
   }
 }
 
-// Selección e interacción de un pétalo
 function selectPetal(id, showModalPopup = true) {
   currentPetalIndex = id;
   discoveredPetals.add(id);
 
-  // Ocultar mensaje inicial de ayuda
   if (tapInstruction) {
     tapInstruction.style.opacity = '0';
   }
 
-  // Actualizar jerarquía y estilos SVG
-  petalElements.forEach(p => {
-    const pId = parseInt(p.getAttribute('data-petal-id'), 10);
-    if (pId === id) {
-      p.classList.add('is-selected');
-      p.parentNode.appendChild(p); // Colocar al frente
+  petalUnits.forEach(unit => {
+    const uId = parseInt(unit.getAttribute('data-petal-id'), 10);
+    if (uId === id) {
+      unit.classList.add('is-selected');
+      unit.parentNode.appendChild(unit);
     } else {
-      p.classList.remove('is-selected');
-      if (discoveredPetals.has(pId)) {
-        p.classList.add('is-discovered');
+      unit.classList.remove('is-selected');
+      if (discoveredPetals.has(uId)) {
+        unit.classList.add('is-discovered');
       }
     }
   });
 
-  // Actualizar barra de progreso
   const count = discoveredPetals.size;
   const percentage = Math.round((count / 12) * 100);
   if (progressBar) progressBar.style.width = `${percentage}%`;
   if (progressText) progressText.textContent = `${count} / 12 pétalos`;
 
-  // Actualizar tarjeta inferior con transición suave
   const data = petalMessages[id];
   if (petalMessageText) {
     petalMessageText.style.opacity = '0';
@@ -263,22 +247,16 @@ function selectPetal(id, showModalPopup = true) {
     }, 150);
   }
 
-  // Abrir modal emergente central con el mensaje
   if (showModalPopup) {
     openPetalModal(id);
   }
 
-  // Guardar progreso en localStorage
   saveProgress();
-
-  // Animación de corazón flotante
   spawnFloatingHeart();
 
-  // Comprobar si se completaron los 12 pétalos
   if (count === 12 && !modalTriggered) {
     modalTriggered = true;
     setTimeout(() => {
-      // Cerrar modal de pétalo si está abierto y abrir modal de celebración final
       closePetalModal();
       openModal();
       triggerCelebrationEffect();
@@ -286,7 +264,6 @@ function selectPetal(id, showModalPopup = true) {
   }
 }
 
-// Control del modal central de pétalo
 function openPetalModal(id) {
   if (!petalModal || !petalModalBox) return;
   const data = petalMessages[id];
@@ -317,7 +294,6 @@ function navigateFromModal(dir) {
   }, 180);
 }
 
-// Navegación Anterior / Siguiente
 function navigatePetal(direction) {
   if (currentPetalIndex === null) {
     selectPetal(0, true);
@@ -329,7 +305,6 @@ function navigatePetal(direction) {
   playChimeSound(nextIndex);
 }
 
-// Revelar pétalo aleatorio no descubierto
 function revealRandomPetal() {
   const unread = [];
   for (let i = 0; i < 12; i++) {
@@ -350,7 +325,6 @@ function revealRandomPetal() {
   }
 }
 
-// Efectos de partículas de corazón flotante
 function spawnFloatingHeart() {
   const heart = document.createElement('div');
   heart.textContent = '💛';
@@ -379,7 +353,6 @@ function spawnHeartSparkles() {
   }
 }
 
-// Modal de Victoria / Celebración
 function openModal() {
   if (!completionModal || !completionBox) return;
   completionModal.classList.remove('pointer-events-none', 'opacity-0');
@@ -398,7 +371,6 @@ function closeModal() {
   completionBox.classList.add('scale-90');
 }
 
-// Modal de Compartir / Personalizar
 function openShareModal() {
   if (!shareModal || !shareBox) return;
   shareModal.classList.remove('pointer-events-none', 'opacity-0');
@@ -456,7 +428,6 @@ function shareOnWhatsApp() {
   window.open(whatsappUrl, '_blank');
 }
 
-// Persistencia en localStorage
 function saveProgress() {
   try {
     const data = {
@@ -464,9 +435,7 @@ function saveProgress() {
       current: currentPetalIndex,
     };
     localStorage.setItem('girasol_progress', JSON.stringify(data));
-  } catch (e) {
-    // Modo privado o storage deshabilitado
-  }
+  } catch (e) {}
 }
 
 function loadSavedProgress() {
@@ -477,8 +446,8 @@ function loadSavedProgress() {
       if (Array.isArray(data.discovered)) {
         data.discovered.forEach(id => {
           discoveredPetals.add(id);
-          const petal = document.getElementById(`petal-${id}`);
-          if (petal) petal.classList.add('is-discovered');
+          const unit = document.getElementById(`petal-unit-${id}`);
+          if (unit) unit.classList.add('is-discovered');
         });
         const count = discoveredPetals.size;
         const percentage = Math.round((count / 12) * 100);
@@ -498,8 +467,8 @@ function restartProgress() {
   currentPetalIndex = null;
   modalTriggered = false;
   
-  petalElements.forEach(p => {
-    p.classList.remove('is-selected', 'is-discovered');
+  petalUnits.forEach(unit => {
+    unit.classList.remove('is-selected', 'is-discovered');
   });
   
   if (progressBar) progressBar.style.width = '0%';
@@ -513,11 +482,8 @@ function restartProgress() {
   }
   
   closeModal();
+  closePetalModal();
 }
-
-// ----------------------------------------------------------------------
-// SINTETIZADOR DE AUDIO (Web Audio API: Chimes & Melodía Romántica)
-// ----------------------------------------------------------------------
 
 function initAudioContext() {
   if (!audioContext) {
@@ -531,25 +497,15 @@ function initAudioContext() {
   }
 }
 
-// Campanilla armónica al pulsar pétalo (Escala Pentatónica Mayor en Fa#/Sol)
 function playChimeSound(index = 0) {
   try {
     initAudioContext();
     if (!audioContext) return;
 
     const pentatonicFrequencies = [
-      523.25, // C5
-      587.33, // D5
-      659.25, // E5
-      783.99, // G5
-      880.00, // A5
-      1046.50, // C6
-      1174.66, // D6
-      1318.51, // E6
-      1567.98, // G6
-      1760.00, // A6
-      2093.00, // C7
-      2349.32  // D7
+      523.25, 587.33, 659.25, 783.99, 880.00,
+      1046.50, 1174.66, 1318.51, 1567.98, 1760.00,
+      2093.00, 2349.32
     ];
 
     const freq = pentatonicFrequencies[index % pentatonicFrequencies.length];
@@ -571,7 +527,6 @@ function playChimeSound(index = 0) {
   } catch (e) {}
 }
 
-// Acorde de victoria / completado
 function playVictoryMelody() {
   try {
     initAudioContext();
@@ -596,7 +551,6 @@ function playVictoryMelody() {
   } catch (e) {}
 }
 
-// Melodía ambiental suave sintetizada en bucle
 function toggleRomanticMusic() {
   initAudioContext();
   if (isMusicPlaying) {
@@ -611,7 +565,6 @@ function startRomanticMelody() {
   if (musicLabel) musicLabel.textContent = "Pausa";
   if (musicIcon) musicIcon.classList.add('animate-spin-slow');
 
-  // Secuencia armónica suave estilo caja de música
   const notes = [
     { f: 440.00, d: 0.8 }, { f: 554.37, d: 0.8 }, { f: 659.25, d: 1.2 },
     { f: 554.37, d: 0.8 }, { f: 739.99, d: 1.2 }, { f: 659.25, d: 1.4 },
@@ -658,9 +611,7 @@ function stopRomanticMelody() {
   if (musicIcon) musicIcon.classList.remove('animate-spin-slow');
 }
 
-// ----------------------------------------------------------------------
-// EFECTO DE CELEBRACIÓN CON CANVAS (Confetti de corazones y pétalos)
-// ----------------------------------------------------------------------
+// Canvas Confetti
 let canvas, ctx;
 let particles = [];
 let animFrameId = null;
@@ -714,8 +665,8 @@ function renderCelebration() {
   particles.forEach(p => {
     p.x += p.vx;
     p.y += p.vy;
-    p.vy += 0.28; // Gravedad
-    p.vx *= 0.98; // Fricción
+    p.vy += 0.28;
+    p.vx *= 0.98;
     p.rotation += p.vRot;
     p.alpha -= 0.009;
 
