@@ -1,0 +1,124 @@
+/* Mobile-first and smooth touch styles */
+* {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  background-attachment: fixed;
+}
+
+/* Glassmorphism Panels */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(254, 240, 138, 0.75);
+  box-shadow: 0 16px 36px -10px rgba(180, 83, 9, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.9);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(253, 230, 138, 0.85);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-pill:hover {
+  background: rgba(254, 243, 199, 0.95);
+  border-color: rgba(245, 158, 11, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Interactive Sunflower Petal Units */
+.petal-unit {
+  cursor: pointer;
+  pointer-events: auto;
+  transition: filter 0.25s ease, opacity 0.2s ease;
+}
+
+.petal-unit path {
+  transition: stroke 0.25s ease, stroke-width 0.25s ease, filter 0.25s ease;
+}
+
+.petal-unit:hover {
+  filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.95)) brightness(1.15);
+}
+
+.petal-unit.is-selected {
+  filter: drop-shadow(0 0 16px #f59e0b) drop-shadow(0 0 6px #fbbf24) brightness(1.25) !important;
+}
+
+.petal-unit.is-selected path.front-petal {
+  stroke: #78350f !important;
+  stroke-width: 2 !important;
+}
+
+.petal-unit.is-discovered path.front-petal {
+  stroke: #d97706;
+  stroke-width: 1.5;
+}
+
+.petal-unit.is-discovered path.back-petal {
+  stroke: #b45309;
+  stroke-width: 1;
+}
+
+/* Floating pollen dots animation */
+@keyframes pollenRise {
+  0% {
+    transform: translateY(105vh) translateX(0) scale(0.6);
+    opacity: 0;
+  }
+  20% { opacity: 0.75; }
+  80% { opacity: 0.85; }
+  100% {
+    transform: translateY(-10vh) translateX(35px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.pollen-dot {
+  position: absolute;
+  background: radial-gradient(circle, #fde047 30%, rgba(254, 240, 138, 0.1) 75%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: pollenRise linear infinite;
+}
+
+/* Desktop Presentation Wrapper */
+@media (min-width: 768px) {
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  main {
+    box-shadow: 0 25px 60px -15px rgba(180, 83, 9, 0.2), 0 0 0 1px rgba(253, 230, 138, 0.6);
+    border-radius: 40px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    margin: 20px auto;
+    min-height: calc(100vh - 40px);
+    max-height: 860px;
+    overflow-y: auto;
+  }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 8s linear infinite;
+}
