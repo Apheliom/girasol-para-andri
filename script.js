@@ -92,6 +92,11 @@ const tapInstruction = document.getElementById('tap-instruction');
 const centerDisc = document.getElementById('center-disc');
 const completionModal = document.getElementById('completion-modal');
 const completionBox = document.getElementById('completion-box');
+const petalModal = document.getElementById('petal-modal');
+const petalModalBox = document.getElementById('petal-modal-box');
+const petalModalBadge = document.getElementById('petal-modal-badge');
+const petalModalTitle = document.getElementById('petal-modal-title');
+const petalModalText = document.getElementById('petal-modal-text');
 const shareModal = document.getElementById('share-modal');
 const shareBox = document.getElementById('share-box');
 const musicToggleBtn = document.getElementById('music-toggle');
@@ -201,10 +206,19 @@ function setupEventListeners() {
   if (shareBtn) {
     shareBtn.addEventListener('click', openShareModal);
   }
+
+  // Cerrar modal de pétalo al hacer clic en el backdrop
+  if (petalModal) {
+    petalModal.addEventListener('click', (e) => {
+      if (e.target === petalModal) {
+        closePetalModal();
+      }
+    });
+  }
 }
 
 // Selección e interacción de un pétalo
-function selectPetal(id) {
+function selectPetal(id, showModalPopup = true) {
   currentPetalIndex = id;
   discoveredPetals.add(id);
 
@@ -233,7 +247,7 @@ function selectPetal(id) {
   if (progressBar) progressBar.style.width = `${percentage}%`;
   if (progressText) progressText.textContent = `${count} / 12 pétalos`;
 
-  // Actualizar tarjeta con transición suave
+  // Actualizar tarjeta inferior con transición suave
   const data = petalMessages[id];
   if (petalMessageText) {
     petalMessageText.style.opacity = '0';
@@ -249,6 +263,11 @@ function selectPetal(id) {
     }, 150);
   }
 
+  // Abrir modal emergente central con el mensaje
+  if (showModalPopup) {
+    openPetalModal(id);
+  }
+
   // Guardar progreso en localStorage
   saveProgress();
 
@@ -259,21 +278,54 @@ function selectPetal(id) {
   if (count === 12 && !modalTriggered) {
     modalTriggered = true;
     setTimeout(() => {
+      // Cerrar modal de pétalo si está abierto y abrir modal de celebración final
+      closePetalModal();
       openModal();
       triggerCelebrationEffect();
-    }, 600);
+    }, 1200);
   }
+}
+
+// Control del modal central de pétalo
+function openPetalModal(id) {
+  if (!petalModal || !petalModalBox) return;
+  const data = petalMessages[id];
+
+  if (petalModalBadge) petalModalBadge.textContent = `Pétalo ${id + 1} de 12`;
+  if (petalModalTitle) petalModalTitle.textContent = data.title;
+  if (petalModalText) petalModalText.textContent = `«${data.text}»`;
+  if (petalModalIcon) petalModalIcon.textContent = "🌻";
+
+  petalModal.classList.remove('pointer-events-none', 'opacity-0');
+  petalModal.classList.add('opacity-100');
+  petalModalBox.classList.remove('scale-90');
+  petalModalBox.classList.add('scale-100');
+}
+
+function closePetalModal() {
+  if (!petalModal || !petalModalBox) return;
+  petalModal.classList.add('opacity-0', 'pointer-events-none');
+  petalModal.classList.remove('opacity-100');
+  petalModalBox.classList.remove('scale-100');
+  petalModalBox.classList.add('scale-90');
+}
+
+function navigateFromModal(dir) {
+  closePetalModal();
+  setTimeout(() => {
+    navigatePetal(dir);
+  }, 180);
 }
 
 // Navegación Anterior / Siguiente
 function navigatePetal(direction) {
   if (currentPetalIndex === null) {
-    selectPetal(0);
+    selectPetal(0, true);
     playChimeSound(0);
     return;
   }
   const nextIndex = (currentPetalIndex + direction + 12) % 12;
-  selectPetal(nextIndex);
+  selectPetal(nextIndex, true);
   playChimeSound(nextIndex);
 }
 
@@ -286,14 +338,14 @@ function revealRandomPetal() {
 
   if (unread.length > 0) {
     const choice = unread[Math.floor(Math.random() * unread.length)];
-    selectPetal(choice);
+    selectPetal(choice, true);
     playChimeSound(choice);
   } else {
     let r;
     do {
       r = Math.floor(Math.random() * 12);
     } while (r === currentPetalIndex);
-    selectPetal(r);
+    selectPetal(r, true);
     playChimeSound(r);
   }
 }
@@ -434,7 +486,7 @@ function loadSavedProgress() {
         if (progressText) progressText.textContent = `${count} / 12 pétalos`;
       }
       if (typeof data.current === 'number' && data.current >= 0 && data.current < 12) {
-        selectPetal(data.current);
+        selectPetal(data.current, false);
       }
     }
   } catch (e) {}
