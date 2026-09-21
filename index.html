@@ -494,11 +494,11 @@
           </p>
         </div>
 
-        <div class="flex items-center gap-2 pt-1">
-          <button class="flex-1 py-2.5 bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md active:scale-95 transition flex items-center justify-center gap-1.5" onclick="closePetalModal()">
-            <span>🌻</span> Continuar
+        <div class="flex items-center gap-2 pt-1" id="petal-modal-actions">
+          <button id="petal-modal-btn-continue" class="flex-1 py-2.5 bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md active:scale-95 transition flex items-center justify-center gap-1.5" onclick="handlePetalModalContinue()">
+            <span id="petal-modal-continue-icon">🌻</span> <span id="petal-modal-continue-text">Continuar</span>
           </button>
-          <button class="py-2.5 px-3 bg-amber-100/80 hover:bg-amber-200/80 text-amber-950 font-bold text-xs rounded-xl border border-amber-300 active:scale-95 transition flex items-center justify-center gap-1" onclick="navigateFromModal(1)" title="Ir al siguiente pétalo">
+          <button id="petal-modal-btn-next" class="py-2.5 px-3 bg-amber-100/80 hover:bg-amber-200/80 text-amber-950 font-bold text-xs rounded-xl border border-amber-300 active:scale-95 transition flex items-center justify-center gap-1" onclick="navigateFromModal(1)" title="Ir al siguiente pétalo">
             Sig. <span class="material-symbols-outlined text-[16px]">chevron_right</span>
           </button>
         </div>
@@ -814,7 +814,13 @@
       const count = discoveredPetals.size;
       const percentage = Math.round((count / 12) * 100);
       if (progressBar) progressBar.style.width = `${percentage}%`;
-      if (progressText) progressText.textContent = `${count} / 12 pétalos`;
+      if (progressText) {
+        if (count === 12) {
+          progressText.innerHTML = `<button onclick="openModal(); triggerCelebrationEffect();" class="text-[11px] font-extrabold text-amber-900 bg-amber-200/90 hover:bg-amber-300 px-2 py-0.5 rounded-full shadow-sm animate-pulse flex items-center gap-1 cursor-pointer"><span>💌</span> Ver Dedicatoria 💛</button>`;
+        } else {
+          progressText.textContent = `${count} / 12 pétalos`;
+        }
+      }
 
       const data = petalMessages[id];
       if (petalMessageText) {
@@ -837,15 +843,6 @@
 
       saveProgress();
       spawnFloatingHeart();
-
-      if (count === 12 && !modalTriggered) {
-        modalTriggered = true;
-        setTimeout(() => {
-          closePetalModal();
-          openModal();
-          triggerCelebrationEffect();
-        }, 1200);
-      }
     }
 
     function openPetalModal(id) {
@@ -857,10 +854,35 @@
       if (petalModalText) petalModalText.textContent = `«${data.text}»`;
       if (petalModalIcon) petalModalIcon.textContent = "🌻";
 
+      // Botones dinámicos si se completaron los 12 pétalos
+      const btnContinueText = document.getElementById('petal-modal-continue-text');
+      const btnContinueIcon = document.getElementById('petal-modal-continue-icon');
+      const btnNext = document.getElementById('petal-modal-btn-next');
+
+      if (discoveredPetals.size === 12) {
+        if (btnContinueText) btnContinueText.textContent = "¡Ver Dedicatoria Final! 💛";
+        if (btnContinueIcon) btnContinueIcon.textContent = "💌";
+        if (btnNext) btnNext.style.display = "none";
+      } else {
+        if (btnContinueText) btnContinueText.textContent = "Continuar";
+        if (btnContinueIcon) btnContinueIcon.textContent = "🌻";
+        if (btnNext) btnNext.style.display = "flex";
+      }
+
       petalModal.classList.remove('pointer-events-none', 'opacity-0');
       petalModal.classList.add('opacity-100');
       petalModalBox.classList.remove('scale-90');
       petalModalBox.classList.add('scale-100');
+    }
+
+    function handlePetalModalContinue() {
+      closePetalModal();
+      if (discoveredPetals.size === 12) {
+        setTimeout(() => {
+          openModal();
+          triggerCelebrationEffect();
+        }, 300);
+      }
     }
 
     function closePetalModal() {
@@ -869,6 +891,14 @@
       petalModal.classList.remove('opacity-100');
       petalModalBox.classList.remove('scale-100');
       petalModalBox.classList.add('scale-90');
+
+      if (discoveredPetals.size === 12 && !modalTriggered) {
+        modalTriggered = true;
+        setTimeout(() => {
+          openModal();
+          triggerCelebrationEffect();
+        }, 350);
+      }
     }
 
     function navigateFromModal(dir) {
@@ -1036,7 +1066,13 @@
             const count = discoveredPetals.size;
             const percentage = Math.round((count / 12) * 100);
             if (progressBar) progressBar.style.width = `${percentage}%`;
-            if (progressText) progressText.textContent = `${count} / 12 pétalos`;
+            if (progressText) {
+              if (count === 12) {
+                progressText.innerHTML = `<button onclick="openModal(); triggerCelebrationEffect();" class="text-[11px] font-extrabold text-amber-900 bg-amber-200/90 hover:bg-amber-300 px-2 py-0.5 rounded-full shadow-sm animate-pulse flex items-center gap-1 cursor-pointer"><span>💌</span> Ver Dedicatoria 💛</button>`;
+              } else {
+                progressText.textContent = `${count} / 12 pétalos`;
+              }
+            }
           }
           if (typeof data.current === 'number' && data.current >= 0 && data.current < 12) {
             selectPetal(data.current, false);
